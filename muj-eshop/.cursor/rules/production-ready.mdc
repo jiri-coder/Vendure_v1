@@ -1,0 +1,16 @@
+---
+description: Require every project change to be suitable for deployment to GitHub and production
+alwaysApply: true
+---
+
+# Production-ready changes
+
+- Treat this repository as production-bound. Every committed change must be portable through GitHub to a production environment.
+- Do not use dummy payment handlers, fake carrier integrations, hard-coded development credentials, placeholder domains, or test-only business logic in the main runtime configuration.
+- Keep secrets and provider credentials in environment variables. Commit only documented example variables without secret values.
+- Development-only tooling must be explicitly gated by the environment and must not be active in production.
+- Use database migrations for schema changes. Never rely on schema synchronization in production.
+- Validate payment, shipping, pricing, and checkout rules on the server, not only in the storefront.
+- Before calling an external integration production-ready, implement and verify authentication, webhooks or callbacks, idempotency, error handling, retries where safe, logging, and refund/cancellation behavior where applicable.
+- If a real provider, hosting platform, or required credential has not been selected, ask for that decision instead of substituting a dummy implementation.
+- Run the relevant builds and tests after changes and document all required production environment variables and deployment steps.

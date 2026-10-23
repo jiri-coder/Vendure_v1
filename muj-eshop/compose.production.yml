@@ -1,0 +1,198 @@
+name: muj-eshop-production
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - internal
+
+  server:
+    build:
+      context: .
+      target: server
+    image: muj-eshop-server:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_ENV: production
+      PORT: 3000
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      SUPERADMIN_USERNAME: ${SUPERADMIN_USERNAME}
+      SUPERADMIN_PASSWORD: ${SUPERADMIN_PASSWORD}
+      CORS_ORIGINS: https://${STOREFRONT_DOMAIN},https://${API_DOMAIN}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_SSL: "false"
+      ASSET_UPLOAD_DIR: /var/lib/vendure/assets
+      ASSET_URL_PREFIX: https://${API_DOMAIN}/assets/
+      STOREFRONT_URL: https://${STOREFRONT_DOMAIN}
+      EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+    volumes:
+      - vendure_assets:/var/lib/vendure/assets
+    networks:
+      - internal
+      - proxy
+
+  worker:
+    image: muj-eshop-server:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    command: ["node", "dist/index-worker.js"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      server:
+        condition: service_started
+    environment:
+      APP_ENV: production
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      SUPERADMIN_USERNAME: ${SUPERADMIN_USERNAME}
+      SUPERADMIN_PASSWORD: ${SUPERADMIN_PASSWORD}
+      CORS_ORIGINS: https://${STOREFRONT_DOMAIN},https://${API_DOMAIN}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_SSL: "false"
+      ASSET_UPLOAD_DIR: /var/lib/vendure/assets
+      ASSET_URL_PREFIX: https://${API_DOMAIN}/assets/
+      STOREFRONT_URL: https://${STOREFRONT_DOMAIN}
+      EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+    volumes:
+      - vendure_assets:/var/lib/vendure/assets
+    networks:
+      - internal
+
+  storefront:
+    build:
+      context: .
+      target: storefront
+      args:
+        VENDURE_SHOP_API_URL: https://${API_DOMAIN}/shop-api
+        NEXT_PUBLIC_SITE_URL: https://${STOREFRONT_DOMAIN}
+        NEXT_PUBLIC_SITE_NAME: ${SITE_NAME:-muj-eshop}
+        NEXT_PUBLIC_ASSET_URL: https://${API_DOMAIN}/assets/
+    image: muj-eshop-storefront:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    depends_on:
+      server:
+        condition: service_started
+    environment:
+      VENDURE_SHOP_API_URL: http://server:3000/shop-api
+      VENDURE_CHANNEL_TOKEN: ${VENDURE_CHANNEL_TOKEN:-__default_channel__}
+      NEXT_PUBLIC_SITE_URL: https://${STOREFRONT_DOMAIN}
+      NEXT_PUBLIC_SITE_NAME: ${SITE_NAME:-muj-eshop}
+      NEXT_PUBLIC_ASSET_URL: https://${API_DOMAIN}/assets/
+      REVALIDATION_SECRET: ${REVALIDATION_SECRET}
+    networks:
+      - internal
+      - proxy
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      STOREFRONT_DOMAIN: ${STOREFRONT_DOMAIN}
+      API_DOMAIN: ${API_DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - proxy
+
+  postgres-backup:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: ${DB_NAME}
+      PGUSER: ${DB_USERNAME}
+      PGPASSWORD: ${DB_PASSWORD}
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        while true; do
+          filename="$$(date -u +%Y-%m-%dT%H-%M-%SZ).dump"
+          pg_dump --format=custom --file="/backups/$$filename.tmp"
+          mv "/backups/$$filename.tmp" "/backups/$$filename"
+          find /backups -type f -name '*.dump' -mtime +30 -delete
+          sleep 86400
+        done
+    volumes:
+      - postgres_backups:/backups
+    networks:
+      - internal
+
+  offsite-backup:
+    image: restic/restic:0.18.1
+    restart: unless-stopped
+    depends_on:
+      - postgres-backup
+    entrypoint: ["/bin/sh", "-ec"]
+    environment:
+      RESTIC_REPOSITORY: ${RESTIC_REPOSITORY}
+      RESTIC_PASSWORD: ${RESTIC_PASSWORD}
+    command:
+      - |
+        restic snapshots >/dev/null 2>&1 || restic init
+        while true; do
+          restic backup /data/postgres /data/assets
+          restic forget --keep-daily 14 --keep-weekly 8 --keep-monthly 12 --prune
+          sleep 86400
+        done
+    volumes:
+      - postgres_backups:/data/postgres:ro
+      - vendure_assets:/data/assets:ro
+      - ./deploy/ssh:/root/.ssh:ro
+    networks:
+      - proxy
+
+volumes:
+  postgres_data:
+  postgres_backups:
+  vendure_assets:
+  caddy_data:
+  caddy_config:
+
+networks:
+  internal:
+    internal: true
+  proxy:

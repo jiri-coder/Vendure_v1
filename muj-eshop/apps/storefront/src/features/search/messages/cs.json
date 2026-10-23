@@ -1,0 +1,25 @@
+{
+  "Sort": {
+    "nameAsc": "Název: A–Z",
+    "nameDesc": "Název: Z–A",
+    "priceAsc": "Cena: od nejnižší",
+    "priceDesc": "Cena: od nejvyšší",
+    "placeholder": "Řazení"
+  },
+  "Filters": {
+    "title": "Filtry",
+    "clearAll": "Zrušit vše",
+    "filtersButton": "Filtry"
+  },
+  "Search": {
+    "title": "Hledání",
+    "pageTitle": "Hledání produktů",
+    "resultsFor": "Výsledky hledání pro „{query}“",
+    "brandTitle": "Značka: {name}",
+    "seriesTitle": "Série: {name}",
+    "brandSeriesTitle": "{brand} · {series}",
+    "resultsTitle": "Výsledky hledání pro „{query}“",
+    "metaDescription": "Produkty odpovídající hledání „{query}“ na {siteName}",
+    "metaCatalogDescription": "Prohledávejte nabídku produktů na {siteName}"
+  }
+}

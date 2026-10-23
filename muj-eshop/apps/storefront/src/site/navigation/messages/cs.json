@@ -1,0 +1,19 @@
+{
+  "Navigation": {
+    "openMenu": "Otevřít nabídku",
+    "menu": "Nabídka",
+    "searchProducts": "Hledat produkty…",
+    "shopAll": "Všechny produkty",
+    "collections": "Kategorie",
+    "account": "Můj účet",
+    "profile": "Profil",
+    "orders": "Objednávky",
+    "addresses": "Adresy",
+    "signIn": "Přihlásit se",
+    "signOut": "Odhlásit se",
+    "greeting": "Dobrý den, {name}",
+    "shoppingCart": "Nákupní košík",
+    "switchLanguage": "Změnit jazyk",
+    "switchCurrency": "Změnit měnu"
+  }
+}

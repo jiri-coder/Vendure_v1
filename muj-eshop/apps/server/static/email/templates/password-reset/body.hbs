@@ -1,0 +1,22 @@
+{{> header title="Obnovení hesla" }}
+
+<mj-section background-color="#fafafa">
+    <mj-column>
+        <mj-text color="#525252">
+            Někdo požádal o nové heslo k vašemu účtu.
+        </mj-text>
+
+        <mj-button font-family="Helvetica"
+                   background-color="#375a67"
+                   color="white"
+                   href="{{ passwordResetUrl }}?token={{ passwordResetToken }}">
+            Nastavit nové heslo
+        </mj-button>
+
+        <mj-text color="#525252">
+            Pokud jste o změnu nežádali, e-mail ignorujte. Heslo se nezmění.
+        </mj-text>
+    </mj-column>
+</mj-section>
+
+{{> footer }}

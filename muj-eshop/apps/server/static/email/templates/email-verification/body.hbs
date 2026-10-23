@@ -1,0 +1,18 @@
+{{> header title="Ověření e-mailové adresy" }}
+
+<mj-section background-color="#fafafa">
+    <mj-column>
+        <mj-text color="#525252">
+            Děkujeme za registraci. Kliknutím na tlačítko ověříte e-mail a aktivujete účet.
+        </mj-text>
+
+        <mj-button font-family="Helvetica"
+                   background-color="#375a67"
+                   color="white"
+                   href="{{ verifyEmailAddressUrl }}?token={{ verificationToken }}">
+            Ověřit e-mail
+        </mj-button>
+    </mj-column>
+</mj-section>
+
+{{> footer }}

@@ -1,0 +1,38 @@
+{{> header title=title }}
+
+<mj-section background-color="#fafafa">
+    <mj-column>
+        <mj-text>
+            {{ intro }}
+        </mj-text>
+        <mj-text>
+            Objednávka: <strong>{{ order.code }}</strong><br/>
+            Zákazník: {{ order.customer.firstName }} {{ order.customer.lastName }}<br/>
+            E-mail: {{ order.customer.emailAddress }}<br/>
+            {{#if order.customer.phoneNumber}}Telefon: {{ order.customer.phoneNumber }}<br/>{{/if}}
+            Celkem: {{ formatMoney order.totalWithTax order.currencyCode 'cs' }}
+        </mj-text>
+        {{#if showFulfillmentInfo}}
+        <mj-text>
+            {{ fulfillmentInfo }}
+        </mj-text>
+        {{/if}}
+        {{#if showShipments}}
+            {{#if shipments.length}}
+            <mj-text>
+                <h3>Zásilky</h3>
+                {{#each shipments}}
+                    {{#if method}}Dopravce: {{ method }}<br/>{{/if}}
+                    {{#if trackingUrl}}
+                        Sledování: <a href="{{ trackingUrl }}">{{#if trackingNumber}}{{ trackingNumber }}{{else}}odkaz{{/if}}</a><br/>
+                    {{else}}
+                        {{#if trackingNumber}}Sledovací číslo: {{ trackingNumber }}<br/>{{/if}}
+                    {{/if}}
+                {{/each}}
+            </mj-text>
+            {{/if}}
+        {{/if}}
+    </mj-column>
+</mj-section>
+
+{{> footer }}

@@ -1,0 +1,19 @@
+{{> header title="Ověření změny e-mailu" }}
+
+<mj-section background-color="#fafafa">
+    <mj-column>
+        <mj-text color="#525252">
+            Přišel požadavek na změnu e-mailu k účtu na tuto adresu.
+            Kliknutím na tlačítko změnu potvrdíte.
+        </mj-text>
+
+        <mj-button font-family="Helvetica"
+                   background-color="#375a67"
+                   color="white"
+                   href="{{ changeEmailAddressUrl }}?token={{ identifierChangeToken }}">
+            Potvrdit nový e-mail
+        </mj-button>
+    </mj-column>
+</mj-section>
+
+{{> footer }}

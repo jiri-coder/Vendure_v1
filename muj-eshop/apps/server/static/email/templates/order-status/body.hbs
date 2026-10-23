@@ -1,0 +1,103 @@
+{{> header title=title }}
+
+<mj-section background-color="#fafafa">
+    <mj-column>
+        <mj-text>
+            Dobrý den, {{ order.customer.firstName }} {{ order.customer.lastName }},
+        </mj-text>
+        <mj-text>
+            {{ intro }}
+        </mj-text>
+        <mj-text>
+            Číslo objednávky: <strong>{{ order.code }}</strong>
+        </mj-text>
+        {{#if showFulfillmentInfo}}
+        <mj-text>
+            {{ fulfillmentInfo }}
+        </mj-text>
+        {{/if}}
+    </mj-column>
+</mj-section>
+
+{{#if showInvoice}}
+<mj-section>
+    <mj-column>
+        <mj-text>
+            <h3>Daňový doklad {{ order.code }}</h3>
+            <strong>Dodavatel</strong><br/>
+            {{ seller.name }}<br/>
+            {{#if seller.address}}{{ seller.address }}<br/>{{/if}}
+            {{#if seller.ico}}IČO: {{ seller.ico }}<br/>{{/if}}
+            {{#if seller.dic}}DIČ: {{ seller.dic }}<br/>{{/if}}
+            <br/>
+            <strong>Odběratel</strong><br/>
+            {{#if billing.company}}{{ billing.company }}<br/>{{/if}}
+            {{ billing.fullName }}<br/>
+            {{#if billing.streetLine1}}{{ billing.streetLine1 }}<br/>{{/if}}
+            {{#if billing.postalCode}}{{ billing.postalCode }} {{/if}}{{ billing.city }}<br/>
+            {{#if order.customFields.companyIco}}IČO: {{ order.customFields.companyIco }}<br/>{{/if}}
+            {{#if order.customFields.companyDic}}DIČ: {{ order.customFields.companyDic }}<br/>{{/if}}
+        </mj-text>
+        <mj-table cellpadding="6px">
+            {{#each order.lines }}
+                <tr>
+                    <td>{{ quantity }}× {{ productVariant.name }}</td>
+                    <td>{{ formatMoney discountedLinePriceWithTax ../order.currencyCode 'cs' }}</td>
+                </tr>
+            {{/each}}
+            {{#each shippingLines }}
+                <tr>
+                    <td>Doprava ({{ shippingMethod.name }})</td>
+                    <td>{{ formatMoney priceWithTax ../order.currencyCode 'cs' }}</td>
+                </tr>
+            {{/each}}
+            {{#each paymentLines }}
+                <tr>
+                    <td>Platba ({{ name }})</td>
+                    <td>{{ formatMoney priceWithTax ../order.currencyCode 'cs' }}</td>
+                </tr>
+            {{/each}}
+            {{#each order.taxSummary }}
+                <tr>
+                    <td>DPH {{ taxRate }} %</td>
+                    <td>{{ formatMoney taxTotal ../order.currencyCode 'cs' }}</td>
+                </tr>
+            {{/each}}
+            <tr>
+                <td><strong>Celkem</strong></td>
+                <td><strong>{{ formatMoney order.totalWithTax order.currencyCode 'cs' }}</strong></td>
+            </tr>
+        </mj-table>
+    </mj-column>
+</mj-section>
+{{/if}}
+
+{{#if showShipments}}
+<mj-section background-color="#fafafa">
+    <mj-column>
+        {{#if shipments.length}}
+        <mj-text>
+            <h3>Sledování zásilky</h3>
+            {{#each shipments}}
+                {{#if method}}Dopravce: {{ method }}<br/>{{/if}}
+                {{#if trackingUrl}}
+                    Sledovací číslo: <a href="{{ trackingUrl }}">{{#if trackingNumber}}{{ trackingNumber }}{{else}}sledovat zásilku{{/if}}</a><br/>
+                {{else}}
+                    {{#if trackingNumber}}Sledovací číslo: {{ trackingNumber }}<br/>{{/if}}
+                {{/if}}
+            {{/each}}
+        </mj-text>
+        {{/if}}
+    </mj-column>
+</mj-section>
+{{/if}}
+
+<mj-section background-color="#fafafa">
+    <mj-column>
+        <mj-text>
+            Stav objednávky si můžete zkontrolovat ve <a href="{{ orderAccountUrl }}">svém účtu</a>.
+        </mj-text>
+    </mj-column>
+</mj-section>
+
+{{> footer }}

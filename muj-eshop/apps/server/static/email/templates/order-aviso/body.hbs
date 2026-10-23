@@ -1,0 +1,40 @@
+{{> header title="Nová objednávka" }}
+
+<mj-section background-color="#fafafa">
+    <mj-column>
+        <mj-text>
+            Přišla nová objednávka <strong>{{ order.code }}</strong>.
+        </mj-text>
+        <mj-text>
+            Zákazník: {{ order.customer.firstName }} {{ order.customer.lastName }}<br/>
+            E-mail: {{ order.customer.emailAddress }}<br/>
+            {{#if order.customer.phoneNumber}}Telefon: {{ order.customer.phoneNumber }}<br/>{{/if}}
+            {{#if order.customFields.companyIco}}IČO: {{ order.customFields.companyIco }}<br/>{{/if}}
+            {{#if order.customFields.companyDic}}DIČ: {{ order.customFields.companyDic }}<br/>{{/if}}
+            Celkem: {{ formatMoney order.totalWithTax order.currencyCode 'cs' }}
+        </mj-text>
+        {{#each paymentLines}}
+        <mj-text>
+            Platba: {{ name }}
+        </mj-text>
+        {{/each}}
+        {{#with order.shippingAddress }}
+        <mj-text>
+            Doručení: {{ fullName }}, {{ streetLine1 }}, {{ postalCode }} {{ city }}
+        </mj-text>
+        {{/with}}
+    </mj-column>
+</mj-section>
+
+<mj-section>
+    <mj-column>
+        <mj-text>
+            <h3>Položky</h3>
+            {{#each order.lines }}
+            {{ quantity }}× {{ productVariant.name }} — {{ formatMoney discountedLinePriceWithTax ../order.currencyCode 'cs' }}<br/>
+            {{/each}}
+        </mj-text>
+    </mj-column>
+</mj-section>
+
+{{> footer }}

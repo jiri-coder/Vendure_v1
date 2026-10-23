@@ -1,0 +1,23 @@
+{
+  "NotFound": {
+    "title": "Stránka nebyla nalezena",
+    "message": "Hledaná stránka neexistuje, byla přesunuta nebo je dočasně nedostupná.",
+    "goHome": "Přejít na hlavní stránku",
+    "browseProducts": "Prohlédnout produkty",
+    "popularCollections": "Oblíbené kategorie"
+  },
+  "Footer": {
+    "description": "Moderní internetový obchod s rychlým a bezpečným nákupem.",
+    "categories": "Kategorie",
+    "customer": "Pro zákazníky",
+    "shopAll": "Všechny produkty",
+    "orders": "Objednávky",
+    "account": "Můj účet",
+    "vendure": "Vendure",
+    "github": "GitHub",
+    "documentation": "Dokumentace",
+    "sourceCode": "Zdrojový kód",
+    "copyright": "Všechna práva vyhrazena.",
+    "poweredBy": "Vytvořeno pomocí"
+  }
+}

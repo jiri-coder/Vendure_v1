@@ -1,0 +1,81 @@
+{
+  "Product": {
+    "inStock": "Skladem",
+    "outOfStock": "Není skladem",
+    "stockCount": "{count, plural, one {# kus} few {# kusy} other {# kusů}}",
+    "addToCart": "Přidat do košíku",
+    "addedToCart": "Přidáno do košíku",
+    "adding": "Přidávání…",
+    "selectOptions": "Vyberte variantu",
+    "addedToCartMessage": "Přidáno do košíku",
+    "addedToCartDescription": "Produkt {name} byl přidán do košíku",
+    "errorTitle": "Chyba",
+    "errorAddToCart": "Produkt se nepodařilo přidat do košíku",
+    "catalogNumber": "Katalogové číslo",
+    "ean": "EAN",
+    "recommendedPrice": "Cena doporučená výrobcem",
+    "sellingPrice": "Prodejní cena",
+    "withTax": "s DPH",
+    "advancePaymentSave": "Platba předem ušetříte",
+    "longDescription": "Popis",
+    "parameters": "Parametry",
+    "downloads": "Soubory ke stažení",
+    "from": "Od",
+    "noImage": "Bez obrázku",
+    "featuredProducts": "Doporučené produkty",
+    "relatedProducts": "Související produkty",
+    "newBadge": "Novinka",
+    "saleBadge": "V akci",
+    "videos": "Video",
+    "addedToCartConfirm": "Produkt byl přidán do košíku.",
+    "accessoriesTitle": "Přihodťe si ještě do košíku",
+    "accessoriesDescription": "K tomuto produktu se hodí i toto příslušenství.",
+    "addAccessory": "Do košíku",
+    "accessoryAdded": "Přidáno",
+    "chooseVariant": "Vybrat",
+    "viewCart": "Přejít do košíku",
+    "backToShop": "Pokračovat v nákupu",
+    "availability": {
+      "IN_STOCK": "Skladem - ihned k odběru",
+      "SUPPLIER_24H": "Skladem u dodavatele (odeslání do 24 hodin)",
+      "SUPPLIER_3D": "Skladem u dodavatele (odeslání do 3 dnů)",
+      "STOCK_4_8D": "Skladem do 4–8 dnů",
+      "STOCK_1_2W": "Skladem do 1–2 týdnů",
+      "USUALLY_14D": "Obvykle do 14 dnů",
+      "USUALLY_30D": "Obvykle do 30 dnů",
+      "ON_REQUEST": "Na dotaz",
+      "SOLD_OUT": "Vyprodáno"
+    },
+    "viewAllProducts": "Zobrazit všechny produkty",
+    "notFound": "Produkt nebyl nalezen",
+    "home": "Domů",
+    "noProductsFound": "Nebyly nalezeny žádné produkty",
+    "shopProductAt": "Kupte {name} na {siteName}",
+    "productCount": "{count, plural, one {# produkt} few {# produkty} other {# produktů}}",
+    "trustBadges": {
+      "fastShipping": "Rychlé doručení",
+      "freeReturns": "Snadné vrácení",
+      "secureCheckout": "Bezpečný nákup",
+      "guarantee": "Záruka spokojenosti"
+    },
+    "faq": {
+      "title": "Časté dotazy",
+      "shipping": {
+        "question": "Jaké nabízíte způsoby dopravy?",
+        "answer": "Dostupné způsoby dopravy a jejich aktuální ceny uvidíte v košíku podle obsahu objednávky a doručovací adresy."
+      },
+      "returns": {
+        "question": "Jak mohu zboží vrátit?",
+        "answer": "Spotřebitel může zboží vrátit v zákonné lhůtě. Zboží pečlivě zabalte a před odesláním kontaktujte naši podporu."
+      },
+      "tracking": {
+        "question": "Jak mohu sledovat objednávku?",
+        "answer": "Po odeslání zásilky vám zašleme e-mail s údaji pro její sledování. Stav najdete také ve svém účtu."
+      },
+      "international": {
+        "question": "Doručujete i do zahraničí?",
+        "answer": "Dostupnost a cenu zahraniční dopravy ověříte po zadání doručovací adresy v pokladně."
+      }
+    }
+  }
+}

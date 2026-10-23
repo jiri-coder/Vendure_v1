@@ -1,0 +1,78 @@
+msgid ""
+msgstr ""
+"Language: cs\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#. js-lingui-explicit-id
+msgid "orderState.PaymentAuthorized"
+msgstr "Čeká na zaplacení"
+
+#. js-lingui-explicit-id
+msgid "orderState.PaymentSettled"
+msgstr "Zaplaceno"
+
+#. js-lingui-explicit-id
+msgid "orderState.Processing"
+msgstr "Vyřizováno"
+
+#. js-lingui-explicit-id
+msgid "paymentState.Authorized"
+msgstr "Čeká na zaplacení"
+
+msgid "Payment authorized"
+msgstr "Čeká na zaplacení"
+
+#. js-lingui-explicit-id
+msgid "fieldName.hasNote"
+msgstr "Poznámka"
+
+msgid "Stock movements"
+msgstr "Pohyby skladu"
+
+msgid "Show stock history"
+msgstr "Zobrazit historii skladu"
+
+msgid "Hide stock history"
+msgstr "Skrýt historii skladu"
+
+msgid "Sale"
+msgstr "Prodej"
+
+msgid "Reservation"
+msgstr "Rezervace"
+
+msgid "Released reservation"
+msgstr "Uvolnění rezervace"
+
+msgid "Cancellation"
+msgstr "Storno"
+
+msgid "Return"
+msgstr "Vrácení"
+
+msgid "Manual change"
+msgstr "Manuální změna"
+
+msgid "Save the variant to see stock movements."
+msgstr "Variantu nejdřív uložte, potom se tu zobrazí pohyby skladu."
+
+msgid "Loading stock movements…"
+msgstr "Načítám pohyby skladu…"
+
+msgid "No recorded stock movements."
+msgstr "Žádné evidované pohyby skladu."
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Quantity"
+msgstr "Množství"
+
+msgid "Order"
+msgstr "Objednávka"
+
+msgid "Administrator"
+msgstr "Administrátor"

@@ -1,0 +1,25 @@
+{
+  "Common": {
+    "loading": "Načítání…",
+    "sending": "Odesílání…",
+    "sku": "SKU",
+    "siteDescription": "Nakupujte kvalitní produkty za výhodné ceny s rychlým doručením na {siteName}."
+  },
+  "Errors": {
+    "fieldsRequired": "Vyplňte všechna povinná pole",
+    "passwordsMismatch": "Hesla se neshodují",
+    "unexpectedError": "Došlo k neočekávané chybě. Zkuste to znovu.",
+    "emailPasswordRequired": "E-mailová adresa a heslo jsou povinné",
+    "verifyEmailFirst": "Před přihlášením ověřte svou e-mailovou adresu.",
+    "invalidCredentials": "Nesprávný e-mail nebo heslo.",
+    "emailRequired": "E-mailová adresa je povinná",
+    "firstLastNameRequired": "Jméno a příjmení jsou povinné",
+    "passwordEmailRequired": "Heslo a nová e-mailová adresa jsou povinné",
+    "invalidEmail": "Zadejte platnou e-mailovou adresu",
+    "failedUpdateCustomer": "Údaje zákazníka se nepodařilo aktualizovat",
+    "newPasswordMustDiffer": "Nové heslo se musí lišit od současného",
+    "failedPasswordReset": "Žádost o obnovení hesla se nepodařilo odeslat",
+    "verificationTokenRequired": "Chybí ověřovací kód",
+    "failedAddToCart": "Produkt se nepodařilo přidat do košíku"
+  }
+}

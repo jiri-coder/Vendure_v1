@@ -1,0 +1,22 @@
+{
+  "Cart": {
+    "title": "Nákupní košík",
+    "empty": "Váš košík je prázdný",
+    "emptyMessage": "Vyberte si z naší nabídky a přidejte produkty do košíku",
+    "continueShopping": "Pokračovat v nákupu",
+    "each": "za kus",
+    "orderSummary": "Souhrn objednávky",
+    "subtotal": "Mezisoučet",
+    "shipping": "Doprava",
+    "calculatedAtCheckout": "Bude vypočtena v pokladně",
+    "total": "Celkem",
+    "proceedToCheckout": "Přejít k objednávce",
+    "secureCheckout": "Bezpečný nákup",
+    "promotionCode": "Slevový kód",
+    "enterDiscountCode": "Zadejte svůj slevový kód",
+    "remove": "Odstranit",
+    "enterCode": "Zadejte kód",
+    "apply": "Použít",
+    "sku": "SKU: {sku}"
+  }
+}

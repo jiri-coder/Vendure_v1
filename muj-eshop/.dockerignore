@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+.git
+.cursor
+.next
+**/.next
+**/dist
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+**/.env
+**/.env.*
+!**/.env.example
+*.log

@@ -1,0 +1,29 @@
+{
+  "Hero": {
+    "title": "Koupelny",
+    "titleHighlight": "eshop",
+    "subtitle": "Sprchy, vany, baterie, keramika a koupelnový nábytek. Doprava po celé České republice, u objednávek nad 10 000 Kč zdarma.",
+    "shopNow": "Nakupovat",
+    "viewCollections": "Zobrazit kategorie"
+  },
+  "Home": {
+    "pageTitle": "Koupelnové vybavení",
+    "description": "Koupelnové zboží, sanitární technika, kuchyně a instalace od Sanitrade s.r.o.",
+    "ogDescription": "Sprchy, vany, baterie a koupelnový nábytek s dopravou po České republice.",
+    "whyShopWithUs": "Proč nakupovat u nás",
+    "features": {
+      "highQuality": {
+        "title": "Vysoká kvalita",
+        "description": "Pečlivě vybrané produkty"
+      },
+      "bestPrices": {
+        "title": "Výhodné ceny",
+        "description": "Férové ceny u všech produktů"
+      },
+      "fastDelivery": {
+        "title": "Rychlé doručení",
+        "description": "Spolehlivá doprava po celé České republice"
+      }
+    }
+  }
+}

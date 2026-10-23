@@ -1,0 +1,26 @@
+{
+  "OrderStatus": {
+    "AddingItems": "Vytváření objednávky",
+    "ArrangingPayment": "Čeká na platbu",
+    "PaymentAuthorized": "Čeká na zaplacení",
+    "PaymentSettled": "Zaplaceno",
+    "Processing": "Vyřizováno",
+    "PartiallyShipped": "Částečně odesláno",
+    "Shipped": "Odesláno",
+    "PartiallyDelivered": "Částečně doručeno",
+    "Delivered": "Doručeno",
+    "Cancelled": "Zrušeno"
+  },
+  "OrderConfirmation": {
+    "pageTitle": "Potvrzení objednávky",
+    "orderConfirmed": "Objednávka byla přijata",
+    "thankYou": "Děkujeme za objednávku. Číslo vaší objednávky je",
+    "emailConfirmation": "Podrobnosti objednávky a údaje pro sledování zásilky vám zašleme e-mailem.",
+    "orderSummary": "Souhrn objednávky",
+    "qty": "Množství: {quantity}",
+    "total": "Celkem",
+    "shippingAddress": "Doručovací adresa",
+    "continueShopping": "Pokračovat v nákupu",
+    "viewOrders": "Zobrazit objednávky"
+  }
+}

@@ -1,0 +1,131 @@
+{{> header title="Potvrzení objednávky" }}
+
+<mj-raw>
+    <style type="text/css">
+    .callout {
+        background-color: #375a67;
+        padding: 15px 0;
+    }
+    .callout-large > div {
+        text-align: center !important;
+        color: #fff !important;
+        font-size: 16px !important;
+        font-weight: bold;
+        padding: 0;
+    }
+    .callout-small > div {
+        text-align: center !important;
+        color: #fff !important;
+        font-size: 14px !important;
+        padding: 0;
+    }
+    ul.address {
+        list-style-type: none;
+        padding: 0;
+    }
+    tr.order-row td {
+        border-bottom: 1px dashed #eee;
+    }
+    tr.total-row {
+        font-weight: bold;
+    }
+    .bg-off-white {
+        background-color: #f5f5f5;
+    }
+    </style>
+</mj-raw>
+
+<mj-section css-class="bg-off-white">
+    <mj-column>
+        <mj-text>
+            Dobrý den, {{ order.customer.firstName }} {{ order.customer.lastName }},
+        </mj-text>
+        <mj-text>
+            děkujeme za objednávku. Níže je její shrnutí.
+        </mj-text>
+    </mj-column>
+</mj-section>
+
+<mj-section css-class="callout">
+    <mj-column>
+        <mj-text css-class="callout-large"><strong>Číslo objednávky</strong></mj-text>
+        <mj-text css-class="callout-small">{{ order.code }}</mj-text>
+    </mj-column>
+    <mj-column>
+        <mj-text css-class="callout-large"><strong>Datum</strong></mj-text>
+        <mj-text css-class="callout-small">{{ formatDate order.orderPlacedAt }}</mj-text>
+    </mj-column>
+    <mj-column>
+        <mj-text css-class="callout-large"><strong>Celkem</strong></mj-text>
+        <mj-text css-class="callout-small">{{ formatMoney order.totalWithTax order.currencyCode 'cs' }}</mj-text>
+    </mj-column>
+</mj-section>
+
+<mj-section css-class="bg-off-white">
+    <mj-column>
+        <mj-text>
+            {{#with order.shippingAddress }}
+                <h3>Doručovací adresa: {{ fullName }}</h3>
+                <ul class="address">
+                    {{#if company}}<li>{{ company }}</li>{{/if}}
+                    {{#if streetLine1}}<li>{{ streetLine1 }}</li>{{/if}}
+                    {{#if city}}<li>{{ city }}</li>{{/if}}
+                    {{#if postalCode}}<li>{{ postalCode }}</li>{{/if}}
+                    {{#if country}}<li>{{ country }}</li>{{/if}}
+                    {{#if phoneNumber}}<li>{{ phoneNumber }}</li>{{/if}}
+                </ul>
+            {{/with}}
+        </mj-text>
+    </mj-column>
+</mj-section>
+
+<mj-section>
+    <mj-column>
+        <mj-text>
+            <h3>Obsah objednávky</h3>
+        </mj-text>
+        <mj-table cellpadding="6px">
+            {{#each order.lines }}
+                <tr class="order-row">
+                    <td>
+                        {{#if featuredAsset.preview}}
+                        <img alt="{{ productVariant.name }}"
+                             style="width: 50px; height: 50px;"
+                             src="{{ featuredAsset.preview }}?w=50&h=50" />
+                        {{/if}}
+                    </td>
+                    <td>{{ quantity }}× {{ productVariant.name }}</td>
+                    <td>{{ formatMoney discountedLinePriceWithTax ../order.currencyCode 'cs' }}</td>
+                </tr>
+            {{/each}}
+            {{#each order.discounts }}
+                <tr class="order-row">
+                    <td colspan="2">{{ description }}</td>
+                    <td>{{ formatMoney amount ../order.currencyCode 'cs' }}</td>
+                </tr>
+            {{/each}}
+            <tr class="order-row">
+                <td colspan="2">Mezisoučet:</td>
+                <td>{{ formatMoney order.subTotalWithTax order.currencyCode 'cs' }}</td>
+            </tr>
+            {{#each shippingLines }}
+            <tr class="order-row">
+                <td colspan="2">Doprava ({{ shippingMethod.name }}):</td>
+                <td>{{ formatMoney priceWithTax ../order.currencyCode 'cs' }}</td>
+            </tr>
+            {{/each}}
+            {{#each paymentLines }}
+            <tr class="order-row">
+                <td colspan="2">Platba ({{ name }}):</td>
+                <td>{{ formatMoney priceWithTax ../order.currencyCode 'cs' }}</td>
+            </tr>
+            {{/each}}
+            <tr class="order-row total-row">
+                <td colspan="2">Celkem:</td>
+                <td>{{ formatMoney order.totalWithTax order.currencyCode 'cs' }}</td>
+            </tr>
+        </mj-table>
+    </mj-column>
+</mj-section>
+
+{{> footer }}

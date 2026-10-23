@@ -1,0 +1,8 @@
+{
+  "Collection": {
+    "home": "Domů",
+    "collectionNotFound": "Kategorie nebyla nalezena",
+    "browseCollectionAt": "Prohlédněte si kategorii {name} na {siteName}",
+    "subcategories": "Podkategorie"
+  }
+}
