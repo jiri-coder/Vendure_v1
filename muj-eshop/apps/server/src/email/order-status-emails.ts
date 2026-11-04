@@ -9,18 +9,13 @@ import {
     LanguageCode,
     OrderStateTransitionEvent,
 } from '@vendure/core';
-import {
-    orderHasSettledPayment,
-    PAYMENT_ADJUSTMENT_SKU_PREFIX,
-} from '../plugins/czech-commerce/manual-payment-handlers';
+import { InvoiceService } from '../plugins/czech-commerce/invoice.service';
+import { orderHasSettledPayment } from '../plugins/czech-commerce/manual-payment-handlers';
+import { paymentLinesForEmail } from './payment-lines';
 import { customerTrackingNumber, customerTrackingUrl } from './shipment-tracking';
 
 const FULFILLMENT_INFO =
     'Objednávku nyní kompletujeme a následně odešleme. O předání zásilky dopravci vás budeme informovat e-mailem.';
-
-function shopNotifyAddress(): string {
-    return process.env.EMAIL_ORDER_NOTIFY_ADDRESS?.trim() ?? '';
-}
 
 function invoiceSeller() {
     return {
@@ -114,29 +109,7 @@ async function loadOrderStatusData({
                   ? 'část vaší objednávky byla odeslána.'
                   : 'vaše objednávka byla odeslána.';
 
-    const shopIntro =
-        toState === 'PaymentSettled'
-            ? 'Platba k objednávce byla přijata.'
-            : toState === 'Processing'
-              ? 'Objednávka na dobírku se vyřizuje.'
-              : toState === 'Cancelled'
-                ? 'Objednávka byla zrušena.'
-                : toState === 'PartiallyShipped'
-                  ? 'Objednávka byla částečně odeslána.'
-                  : 'Objednávka byla odeslána.';
-
-    const surcharges = event.order.surcharges ?? [];
-    const paymentLines = (event.order.payments ?? [])
-        .filter(payment => payment.state === 'Authorized' || payment.state === 'Settled')
-        .map(payment => {
-            const metadata = payment.metadata as { public?: { methodName?: string } } | undefined;
-            const adjustmentSkuPrefix = `${PAYMENT_ADJUSTMENT_SKU_PREFIX}:${payment.method}`;
-            const surcharge = surcharges.find(item => item.sku.startsWith(adjustmentSkuPrefix));
-            return {
-                name: metadata?.public?.methodName?.trim() || payment.method,
-                priceWithTax: surcharge?.priceWithTax ?? 0,
-            };
-        });
+    const paymentLines = paymentLinesForEmail(event.order);
 
     const shipments = (event.order.fulfillments ?? [])
         .filter(fulfillment => fulfillment.state !== 'Cancelled')
@@ -155,12 +128,21 @@ async function loadOrderStatusData({
         ? event.order.billingAddress
         : event.order.shippingAddress;
     const storefrontUrl = (process.env.STOREFRONT_URL || 'http://localhost:3001').replace(/\/$/, '');
+    let invoiceNumber = '';
+    if (showInvoice) {
+        try {
+            const invoice = await injector.get(InvoiceService).ensureInvoice(event.ctx, event.order);
+            invoiceNumber = invoice.number;
+        } catch {
+            invoiceNumber = '';
+        }
+    }
 
     return {
         title,
         customerIntro,
-        shopIntro,
         showInvoice,
+        invoiceNumber,
         showFulfillmentInfo,
         fulfillmentInfo: FULFILLMENT_INFO,
         showShipments,
@@ -186,30 +168,7 @@ export const orderStatusCustomerHandler = new EmailEventListener('order-status')
         title: event.data.title,
         intro: event.data.customerIntro,
         showInvoice: event.data.showInvoice,
-        showFulfillmentInfo: event.data.showFulfillmentInfo,
-        fulfillmentInfo: event.data.fulfillmentInfo,
-        showShipments: event.data.showShipments,
-        shipments: event.data.shipments,
-        shippingLines: event.data.shippingLines,
-        paymentLines: event.data.paymentLines,
-        seller: event.data.seller,
-        billing: event.data.billing,
-        orderAccountUrl: event.data.orderAccountUrl,
-    }));
-
-export const orderStatusAvisoHandler = new EmailEventListener('order-status-aviso')
-    .on(OrderStateTransitionEvent)
-    .filter(event => isCustomerStatusEmail(event) && !!shopNotifyAddress())
-    .loadData(loadOrderStatusData)
-    .setRecipient(() => shopNotifyAddress())
-    .setFrom('{{ fromAddress }}')
-    .setLanguageCode(() => LanguageCode.cs)
-    .setSubject('{{ title }} — {{ order.code }}')
-    .setTemplateVars(event => ({
-        order: event.order,
-        title: event.data.title,
-        intro: event.data.shopIntro,
-        showInvoice: event.data.showInvoice,
+        invoiceNumber: event.data.invoiceNumber,
         showFulfillmentInfo: event.data.showFulfillmentInfo,
         fulfillmentInfo: event.data.fulfillmentInfo,
         showShipments: event.data.showShipments,

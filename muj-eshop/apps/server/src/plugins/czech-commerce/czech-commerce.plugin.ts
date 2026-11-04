@@ -11,9 +11,14 @@ import {
     VendurePlugin,
 } from '@vendure/core';
 import {
+    BankTransferInstructionsResolver,
+    bankTransferShopApiExtensions,
+} from './bank-transfer-instructions';
+import {
     PaymentPricingShopResolver,
     paymentPricingShopApiExtensions,
 } from './payment-pricing';
+import { gql } from 'graphql-tag';
 import { czechTieredShippingCalculator } from './shipping-calculator';
 import { FilterFacetService, FILTER_FACETS } from './filter-facets';
 import { PaymentAdjustmentInvalidationService } from './payment-adjustment-invalidation.service';
@@ -24,6 +29,15 @@ import { sanitizeCustomFieldRelationInputs } from './sanitize-custom-field-relat
 import { NumericStockDisplayStrategy } from './stock-display-strategy';
 import { ShippingPaymentRestrictionService } from './shipping-payment-restriction.service';
 import { OrderHasNoteResolver, orderHasNoteAdminApiExtensions } from './order-has-note';
+import { ShopInvoice, ShopInvoiceLine } from './invoice-entities';
+import { InvoiceService } from './invoice.service';
+import {
+    ShopInvoiceAdminResolver,
+    ShopInvoiceOrderResolver,
+    ShopInvoiceShopResolver,
+    shopInvoiceAdminApiExtensions,
+    shopInvoiceShopApiExtensions,
+} from './invoice.resolver';
 import {
     AllocationOrderLineResolver,
     CancellationOrderLineResolver,
@@ -305,6 +319,7 @@ export const czechPaymentEligibilityChecker = new PaymentMethodEligibilityChecke
     compatibility: '^3.7.0',
     dashboard: './dashboard/index.tsx',
     imports: [PluginCommonModule],
+    entities: [ShopInvoice, ShopInvoiceLine],
     providers: [
         PaymentAdjustmentInvalidationService,
         FilterFacetService,
@@ -312,19 +327,34 @@ export const czechPaymentEligibilityChecker = new PaymentMethodEligibilityChecke
         ProductCategoryAssignmentService,
         ShippingPaymentRestrictionService,
         StockLedgerOriginService,
+        InvoiceService,
     ],
     shopApiExtensions: {
-        schema: paymentPricingShopApiExtensions,
-        resolvers: [PaymentPricingShopResolver],
+        schema: gql([
+            paymentPricingShopApiExtensions.loc?.source.body ?? '',
+            bankTransferShopApiExtensions.loc?.source.body ?? '',
+            shopInvoiceShopApiExtensions.loc?.source.body ?? '',
+        ].join('\n')),
+        resolvers: [
+            PaymentPricingShopResolver,
+            BankTransferInstructionsResolver,
+            ShopInvoiceOrderResolver,
+            ShopInvoiceShopResolver,
+        ],
     },
     adminApiExtensions: {
-        schema: orderHasNoteAdminApiExtensions,
+        schema: gql([
+            orderHasNoteAdminApiExtensions.loc?.source.body ?? '',
+            shopInvoiceAdminApiExtensions.loc?.source.body ?? '',
+        ].join('\n')),
         resolvers: [
             OrderHasNoteResolver,
             SaleOrderLineResolver,
             ReleaseOrderLineResolver,
             AllocationOrderLineResolver,
             CancellationOrderLineResolver,
+            ShopInvoiceOrderResolver,
+            ShopInvoiceAdminResolver,
         ],
     },
     configuration: config => {

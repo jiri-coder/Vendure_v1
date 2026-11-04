@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { OrderLine } from './types';
 import { useCheckout } from './checkout-provider';
 import { Price } from '@/features/pricing/price';
+import { paymentAdjustmentCustomerLabel } from '@/features/orders/payment-display';
 import {useTranslations} from 'next-intl';
 
 function OrderSummaryContent({ order, t }: { order: ReturnType<typeof useCheckout>['order']; t: ReturnType<typeof useTranslations<'Checkout'>> }) {
@@ -94,7 +95,7 @@ function OrderSummaryContent({ order, t }: { order: ReturnType<typeof useCheckou
             key={surcharge.id}
             className={`flex justify-between text-sm ${surcharge.priceWithTax < 0 ? 'text-green-600' : ''}`}
           >
-            <span>{surcharge.description}</span>
+            <span>{paymentAdjustmentCustomerLabel(surcharge)}</span>
             <span>
               {surcharge.priceWithTax > 0 ? '+' : ''}
               <Price value={surcharge.priceWithTax} currencyCode={order.currencyCode} />

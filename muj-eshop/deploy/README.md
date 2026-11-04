@@ -14,8 +14,10 @@ cp .env.production.example .env.production
 chmod 600 .env.production
 ```
 
-Set real domains, randomly-generated secrets, PostgreSQL credentials and SMTP
-credentials. Create DNS A/AAAA records for both domains before starting Caddy.
+Set real domains, randomly-generated secrets, PostgreSQL credentials, SMTP
+credentials, `INVOICE_SELLER_*` (seller identity printed on PDF invoices) and
+`BANK_ACCOUNT_IBAN` (Czech IBAN used for SPD QR payments on bank-transfer orders).
+Create DNS A/AAAA records for both domains before starting Caddy.
 
 ## Off-site backups
 

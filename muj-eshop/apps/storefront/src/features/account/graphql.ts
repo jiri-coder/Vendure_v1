@@ -176,6 +176,22 @@ export const GetOrderDetailQuery = graphql(`
                 sku
                 priceWithTax
             }
+            shopInvoice {
+                id
+                number
+                issuedAt
+            }
+            bankTransferInstructions {
+                accountName
+                accountNumber
+                iban
+                bankName
+                variableSymbol
+                amount
+                currencyCode
+                message
+                spdPayload
+            }
         }
     }
 `);

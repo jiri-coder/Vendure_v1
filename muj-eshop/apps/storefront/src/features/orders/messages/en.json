@@ -21,6 +21,22 @@
     "total": "Total",
     "shippingAddress": "Shipping Address",
     "continueShopping": "Continue Shopping",
-    "viewOrders": "View Orders"
+    "viewOrders": "View Orders",
+    "invoice": "Invoice",
+    "invoiceNumber": "Tax document {number}",
+    "downloadInvoice": "Download PDF"
+  },
+  "BankTransferPayment": {
+    "title": "Pay by bank transfer",
+    "intro": "Scan the QR code in your banking app, or enter the details manually. We match the payment using the variable symbol.",
+    "qrAlt": "QR code for bank transfer",
+    "accountName": "Recipient",
+    "accountNumber": "Account number",
+    "iban": "IBAN",
+    "bankName": "Bank",
+    "variableSymbol": "Variable symbol",
+    "amount": "Amount",
+    "message": "Payment message",
+    "copy": "Copy"
   }
 }

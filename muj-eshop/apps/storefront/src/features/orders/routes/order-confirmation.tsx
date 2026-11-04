@@ -5,6 +5,9 @@ import { Link } from '@/platform/i18n/navigation';
 import Image from 'next/image';
 import {Separator} from '@/components/ui/separator';
 import {Price} from '@/features/pricing/price';
+import {BankTransferPayBox} from '@/features/orders/bank-transfer-pay-box';
+import {InvoiceDownloadButton} from '@/features/orders/invoice-download';
+import {paymentAdjustmentCustomerLabel} from '@/features/orders/payment-display';
 import {notFound} from 'next/navigation';
 import {getRouteLocale} from '@/platform/i18n/server';
 import {getTranslations} from 'next-intl/server';
@@ -56,6 +59,22 @@ const GetOrderByCodeQuery = graphql(`
                 postalCode
                 country
             }
+            shopInvoice {
+                id
+                number
+                issuedAt
+            }
+            bankTransferInstructions {
+                accountName
+                accountNumber
+                iban
+                bankName
+                variableSymbol
+                amount
+                currencyCode
+                message
+                spdPayload
+            }
         }
     }
 `);
@@ -94,6 +113,28 @@ export async function OrderConfirmation({paramsPromise}: OrderConfirmationProps)
                         {t('emailConfirmation')}
                     </p>
                 </div>
+
+                {order.shopInvoice ? (
+                    <Card className="mb-6">
+                        <CardHeader>
+                            <CardTitle>{t('invoice')}</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                            <p className="text-sm text-muted-foreground">
+                                {t('invoiceNumber', {number: order.shopInvoice.number})}
+                            </p>
+                            <InvoiceDownloadButton
+                                orderCode={order.code}
+                                invoiceNumber={order.shopInvoice.number}
+                                label={t('downloadInvoice')}
+                            />
+                        </CardContent>
+                    </Card>
+                ) : null}
+
+                {order.bankTransferInstructions ? (
+                    <BankTransferPayBox instructions={order.bankTransferInstructions} />
+                ) : null}
 
                 <Card className="mb-6">
                     <CardHeader>
@@ -145,7 +186,7 @@ export async function OrderConfirmation({paramsPromise}: OrderConfirmationProps)
                                 key={surcharge.id}
                                 className={`flex justify-between text-sm ${surcharge.priceWithTax < 0 ? 'text-green-600' : ''}`}
                             >
-                                <span>{surcharge.description}</span>
+                                <span>{paymentAdjustmentCustomerLabel(surcharge)}</span>
                                 <span>
                                     {surcharge.priceWithTax > 0 ? '+' : ''}
                                     <Price value={surcharge.priceWithTax} currencyCode={order.currencyCode}/>

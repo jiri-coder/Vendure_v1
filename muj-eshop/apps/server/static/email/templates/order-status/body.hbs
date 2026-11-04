@@ -23,51 +23,12 @@
 <mj-section>
     <mj-column>
         <mj-text>
-            <h3>Daňový doklad {{ order.code }}</h3>
-            <strong>Dodavatel</strong><br/>
-            {{ seller.name }}<br/>
-            {{#if seller.address}}{{ seller.address }}<br/>{{/if}}
-            {{#if seller.ico}}IČO: {{ seller.ico }}<br/>{{/if}}
-            {{#if seller.dic}}DIČ: {{ seller.dic }}<br/>{{/if}}
-            <br/>
-            <strong>Odběratel</strong><br/>
-            {{#if billing.company}}{{ billing.company }}<br/>{{/if}}
-            {{ billing.fullName }}<br/>
-            {{#if billing.streetLine1}}{{ billing.streetLine1 }}<br/>{{/if}}
-            {{#if billing.postalCode}}{{ billing.postalCode }} {{/if}}{{ billing.city }}<br/>
-            {{#if order.customFields.companyIco}}IČO: {{ order.customFields.companyIco }}<br/>{{/if}}
-            {{#if order.customFields.companyDic}}DIČ: {{ order.customFields.companyDic }}<br/>{{/if}}
+            <h3>Daňový doklad{{#if invoiceNumber}} {{ invoiceNumber }}{{/if}}</h3>
+            PDF fakturu stáhnete po přihlášení v detailu objednávky.
         </mj-text>
-        <mj-table cellpadding="6px">
-            {{#each order.lines }}
-                <tr>
-                    <td>{{ quantity }}× {{ productVariant.name }}</td>
-                    <td>{{ formatMoney discountedLinePriceWithTax ../order.currencyCode 'cs' }}</td>
-                </tr>
-            {{/each}}
-            {{#each shippingLines }}
-                <tr>
-                    <td>Doprava ({{ shippingMethod.name }})</td>
-                    <td>{{ formatMoney priceWithTax ../order.currencyCode 'cs' }}</td>
-                </tr>
-            {{/each}}
-            {{#each paymentLines }}
-                <tr>
-                    <td>Platba ({{ name }})</td>
-                    <td>{{ formatMoney priceWithTax ../order.currencyCode 'cs' }}</td>
-                </tr>
-            {{/each}}
-            {{#each order.taxSummary }}
-                <tr>
-                    <td>DPH {{ taxRate }} %</td>
-                    <td>{{ formatMoney taxTotal ../order.currencyCode 'cs' }}</td>
-                </tr>
-            {{/each}}
-            <tr>
-                <td><strong>Celkem</strong></td>
-                <td><strong>{{ formatMoney order.totalWithTax order.currencyCode 'cs' }}</strong></td>
-            </tr>
-        </mj-table>
+        <mj-button href="{{ orderAccountUrl }}" background-color="#375a67" color="#ffffff">
+            Stáhnout fakturu v účtu
+        </mj-button>
     </mj-column>
 </mj-section>
 {{/if}}

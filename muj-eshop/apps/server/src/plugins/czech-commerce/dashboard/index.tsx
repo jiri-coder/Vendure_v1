@@ -6,6 +6,8 @@ import {
     hiddenFieldComponentId,
 } from './collection-tree-input';
 import { ParameterListInput, parameterListComponentId } from './parameter-list-input';
+import { OrderCustomerBlock } from './order-customer-block';
+import { OrderInvoiceBlock } from './order-invoice';
 import { VariantStockLedger } from './variant-stock-ledger';
 
 type SchemaFieldInfo = [string, boolean, boolean, boolean];
@@ -60,6 +62,25 @@ defineDashboardExtension({
             },
             component: VariantStockLedger,
         },
+        {
+            id: 'czech-commerce-order-invoice',
+            location: {
+                pageId: 'order-detail',
+                column: 'main',
+                position: { blockId: 'order-table', order: 'after' },
+            },
+            component: OrderInvoiceBlock,
+        },
+        {
+            id: 'czech-commerce-order-customer',
+            title: 'Zákazník',
+            location: {
+                pageId: 'order-detail',
+                column: 'side',
+                position: { blockId: 'customer', order: 'replace' },
+            },
+            component: OrderCustomerBlock,
+        },
     ],
     customFormComponents: {
         customFields: [
@@ -85,10 +106,19 @@ defineDashboardExtension({
                     orders {
                         items {
                             hasNote
+                            state
+                            payments {
+                                state
+                            }
                         }
                     }
                 }
             `,
+            viewOptionDefaults: {
+                columnVisibility: {
+                    payments: false,
+                },
+            },
         },
         {
             pageId: 'shipping-method-list',
@@ -124,6 +154,18 @@ defineDashboardExtension({
         },
     ],
     detailForms: [
+        {
+            pageId: 'order-detail',
+            extendDetailDocument: `
+                query {
+                    order {
+                        customer {
+                            emailAddress
+                        }
+                    }
+                }
+            `,
+        },
         {
             pageId: 'shipping-method-detail',
             extendDetailDocument: `

@@ -61,6 +61,30 @@
     </mj-column>
 </mj-section>
 
+{{#if bankTransfer}}
+<mj-section>
+    <mj-column>
+        <mj-text>
+            <h3>Platba převodem</h3>
+            Objednávku dokončíte převodem na účet. Platbu spárujeme podle variabilního symbolu.
+            Můžete naskenovat QR kód v bankovní aplikaci.
+        </mj-text>
+        <mj-image src="{{ bankTransfer.qrImageUrl }}" alt="QR platba" width="200px" padding="8px 0 16px 0" />
+        <mj-text>
+            <ul class="address">
+                <li><strong>Příjemce:</strong> {{ bankTransfer.accountName }}</li>
+                <li><strong>Číslo účtu:</strong> {{ bankTransfer.accountNumber }}</li>
+                <li><strong>IBAN:</strong> {{ bankTransfer.iban }}</li>
+                {{#if bankTransfer.bankName}}<li><strong>Banka:</strong> {{ bankTransfer.bankName }}</li>{{/if}}
+                <li><strong>Variabilní symbol:</strong> {{ bankTransfer.variableSymbol }}</li>
+                <li><strong>Částka:</strong> {{ formatMoney bankTransfer.amount bankTransfer.currencyCode 'cs' }}</li>
+                <li><strong>Zpráva pro příjemce:</strong> {{ bankTransfer.message }}</li>
+            </ul>
+        </mj-text>
+    </mj-column>
+</mj-section>
+{{/if}}
+
 <mj-section css-class="bg-off-white">
     <mj-column>
         <mj-text>
@@ -116,7 +140,7 @@
             {{/each}}
             {{#each paymentLines }}
             <tr class="order-row">
-                <td colspan="2">Platba ({{ name }}):</td>
+                <td colspan="2">{{ label }}:</td>
                 <td>{{ formatMoney priceWithTax ../order.currencyCode 'cs' }}</td>
             </tr>
             {{/each}}

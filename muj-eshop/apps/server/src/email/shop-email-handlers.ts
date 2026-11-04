@@ -10,12 +10,11 @@ import {
     EntityHydrator,
     Injector,
     LanguageCode,
-    Order,
     OrderStateTransitionEvent,
-    Payment,
 } from '@vendure/core';
-import { PAYMENT_ADJUSTMENT_SKU_PREFIX } from '../plugins/czech-commerce/manual-payment-handlers';
-import { orderStatusAvisoHandler, orderStatusCustomerHandler } from './order-status-emails';
+import { orderStatusCustomerHandler } from './order-status-emails';
+import { buildBankTransferInstructions } from '../plugins/czech-commerce/bank-transfer-instructions';
+import { paymentLinesForEmail } from './payment-lines';
 
 function isNewlyPlacedOrder(event: OrderStateTransitionEvent): boolean {
     return (
@@ -57,32 +56,24 @@ async function loadPlacedOrderData({
     };
 }
 
-function paymentMethodName(payment: Payment): string {
-    const metadata = payment.metadata as { public?: { methodName?: string } } | undefined;
-    const storedName = metadata?.public?.methodName?.trim();
-    return storedName || payment.method;
-}
-
-function paymentLinesForEmail(order: Order): Array<{ name: string; priceWithTax: number }> {
-    const surcharges = order.surcharges ?? [];
-    const visiblePayments = (order.payments ?? []).filter(
-        payment => payment.state === 'Authorized' || payment.state === 'Settled',
-    );
-
-    return visiblePayments.map(payment => {
-        const adjustmentSku = `${PAYMENT_ADJUSTMENT_SKU_PREFIX}:${payment.method}`;
-        const surcharge = surcharges.find(item => item.sku === adjustmentSku);
-        return {
-            name: paymentMethodName(payment),
-            priceWithTax: surcharge?.priceWithTax ?? 0,
-        };
-    });
+async function loadOrderConfirmationData({
+    event,
+    injector,
+}: {
+    event: OrderStateTransitionEvent;
+    injector: Injector;
+}) {
+    const data = await loadPlacedOrderData({ event, injector });
+    return {
+        ...data,
+        bankTransfer: await buildBankTransferInstructions(event.order),
+    };
 }
 
 export const orderConfirmationHandler = new EmailEventListener('order-confirmation')
     .on(OrderStateTransitionEvent)
     .filter(isAwaitingPaymentConfirmation)
-    .loadData(loadPlacedOrderData)
+    .loadData(loadOrderConfirmationData)
     .setRecipient(event => event.order.customer!.emailAddress)
     .setFrom('{{ fromAddress }}')
     .setLanguageCode(() => LanguageCode.cs)
@@ -91,6 +82,7 @@ export const orderConfirmationHandler = new EmailEventListener('order-confirmati
         order: event.order,
         shippingLines: event.data.shippingLines,
         paymentLines: event.data.paymentLines,
+        bankTransfer: event.data.bankTransfer,
     }));
 
 export const orderAvisoHandler = new EmailEventListener('order-aviso')
@@ -111,7 +103,6 @@ export const shopEmailHandlers = [
     orderConfirmationHandler,
     orderAvisoHandler,
     orderStatusCustomerHandler,
-    orderStatusAvisoHandler,
     emailVerificationHandler
         .setLanguageCode(() => LanguageCode.cs)
         .setSubject('Ověření e-mailové adresy'),

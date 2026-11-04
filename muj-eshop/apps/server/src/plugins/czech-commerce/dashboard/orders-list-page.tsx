@@ -17,6 +17,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 import { createDraftOrderDocument, orderListDocument } from './orders.graphql.js';
 import { OrderNoteCell } from './order-note-cell';
+import { OrderPaidCell } from './order-paid-cell';
 
 export const Route = createFileRoute('/_authenticated/_orders/orders')({
     component: OrderListPage,
@@ -75,13 +76,14 @@ function OrderListPage() {
                     cell: OrderStateCell,
                 },
                 code: {
-                    meta: { dependencies: ['hasNote'] },
+                    meta: { dependencies: ['hasNote', 'payments', 'state'] },
                     cell: ({ cell, row }) => {
                         const value = cell.getValue() as string;
                         const id = row.original.id;
                         const hasNote = Boolean((row.original as { hasNote?: boolean }).hasNote);
                         return (
                             <span className="inline-flex items-center gap-1.5">
+                                <OrderPaidCell row={row} />
                                 <OrderNoteCell getValue={() => hasNote} row={row} />
                                 <DetailPageButton id={id} label={value} />
                             </span>
@@ -113,6 +115,7 @@ function OrderListPage() {
                 orderPlacedAt: false,
                 type: false,
                 currencyCode: false,
+                payments: false,
             }}
             facetedFilters={{
                 state: {

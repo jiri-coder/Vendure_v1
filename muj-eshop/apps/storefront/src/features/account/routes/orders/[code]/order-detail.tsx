@@ -10,7 +10,9 @@ import Image from 'next/image';
 import {Link} from '@/platform/i18n/navigation';
 import {Price} from '@/features/pricing/price';
 import {OrderStatusBadge} from '@/features/orders/order-status-badge';
-import {customerPaymentMethodName, isCustomerVisibleTransactionId, isKnownPaymentState} from '@/features/orders/payment-display';
+import {BankTransferPayBox} from '@/features/orders/bank-transfer-pay-box';
+import {InvoiceDownloadButton} from '@/features/orders/invoice-download';
+import {customerPaymentMethodName, isCustomerVisibleTransactionId, isKnownPaymentState, paymentAdjustmentCustomerLabel} from '@/features/orders/payment-display';
 import {
     customerTrackingNumber,
     customerTrackingUrl,
@@ -66,6 +68,28 @@ export function OrderDetail({orderPromise}: OrderDetailProps) {
                     <OrderStatusBadge state={order.state}/>
                 </div>
             </div>
+
+            {order.shopInvoice ? (
+                <Card className="mb-6">
+                    <CardHeader>
+                        <CardTitle>{t('invoice')}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                        <p className="text-sm text-muted-foreground">
+                            {t('invoiceNumber', {number: order.shopInvoice.number})}
+                        </p>
+                        <InvoiceDownloadButton
+                            orderCode={order.code}
+                            invoiceNumber={order.shopInvoice.number}
+                            label={t('downloadInvoice')}
+                        />
+                    </CardContent>
+                </Card>
+            ) : null}
+
+            {order.bankTransferInstructions ? (
+                <BankTransferPayBox instructions={order.bankTransferInstructions} />
+            ) : null}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
@@ -143,7 +167,7 @@ export function OrderDetail({orderPromise}: OrderDetailProps) {
                                         className={`flex justify-between text-sm ${surcharge.priceWithTax < 0 ? 'text-green-600' : ''}`}
                                     >
                                         <span className={surcharge.priceWithTax < 0 ? undefined : 'text-muted-foreground'}>
-                                            {surcharge.description}
+                                            {paymentAdjustmentCustomerLabel(surcharge)}
                                         </span>
                                         <span>
                                             {surcharge.priceWithTax > 0 ? '+' : ''}

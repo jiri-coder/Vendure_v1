@@ -24,11 +24,14 @@
     "@vendure/email-plugin": "3.7.4",
     "@vendure/graphiql-plugin": "3.7.4",
     "better-sqlite3": "12.11.1",
+    "dejavu-fonts-ttf": "^2.37.3",
     "dotenv": "18.0.7",
     "graphql-tag": "^2.12.7",
+    "pdfkit": "^0.20.2",
     "pg": "^8.23.1"
   },
   "devDependencies": {
+    "@types/pdfkit": "^0.17.7",
     "@vendure/cli": "3.7.4",
     "ts-node": "10.9.2",
     "typescript": "5.8.2",

@@ -18,6 +18,7 @@ import {
     PAYMENT_ADJUSTMENT_SKU_PREFIX,
     paymentAdjustmentSku,
 } from './manual-payment-handlers';
+import { customerPaymentMethodLabel } from './payment-method-labels';
 import { ShippingPaymentRestrictionService } from './shipping-payment-restriction.service';
 
 export const paymentPricingShopApiExtensions = gql`
@@ -246,7 +247,7 @@ export class PaymentPricingShopResolver {
             }
 
             order = await this.orderService.addSurchargeToOrder(ctx, order.id, {
-                description: quote.name,
+                description: customerPaymentMethodLabel(code, quote.name),
                 sku: paymentAdjustmentSku(code, group.taxRate),
                 listPrice: groupAdjustment,
                 listPriceIncludesTax: true,

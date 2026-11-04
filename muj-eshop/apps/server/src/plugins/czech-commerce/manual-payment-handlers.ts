@@ -3,6 +3,7 @@ import {
     Order,
     PaymentMethodHandler,
 } from '@vendure/core';
+import { customerPaymentMethodLabel } from './payment-method-labels';
 
 type ManualPaymentKind = 'BANK_TRANSFER' | 'COD' | 'PAY_AT_PICKUP';
 
@@ -131,10 +132,11 @@ function createManualPaymentHandler(options: ManualPaymentHandlerOptions) {
                 };
             }
 
-            const methodName =
+            const translatedName =
                 method.translations?.find(translation => translation.languageCode === ctx.languageCode)?.name
                 ?? method.translations?.find(translation => translation.languageCode === LanguageCode.cs)?.name
-                ?? method.code;
+                ?? method.name;
+            const methodName = customerPaymentMethodLabel(method.code, translatedName);
 
             return {
                 amount,

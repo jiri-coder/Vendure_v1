@@ -21,6 +21,22 @@
     "total": "Celkem",
     "shippingAddress": "Doručovací adresa",
     "continueShopping": "Pokračovat v nákupu",
-    "viewOrders": "Zobrazit objednávky"
+    "viewOrders": "Zobrazit objednávky",
+    "invoice": "Faktura",
+    "invoiceNumber": "Daňový doklad {number}",
+    "downloadInvoice": "Stáhnout PDF"
+  },
+  "BankTransferPayment": {
+    "title": "Rychlá platba přes QR kód",
+    "intro": "Naskenujte QR kód v bankovní aplikaci, nebo zadejte údaje ručně. Platbu spárujeme podle variabilního symbolu.",
+    "qrAlt": "QR kód pro platbu převodem",
+    "accountName": "Příjemce",
+    "accountNumber": "Číslo účtu",
+    "iban": "IBAN",
+    "bankName": "Banka",
+    "variableSymbol": "Variabilní symbol",
+    "amount": "Částka",
+    "message": "Zpráva pro příjemce",
+    "copy": "Kopírovat"
   }
 }

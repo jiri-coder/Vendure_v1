@@ -21,6 +21,22 @@
     "total": "Gesamt",
     "shippingAddress": "Lieferadresse",
     "continueShopping": "Weiter einkaufen",
-    "viewOrders": "Bestellungen ansehen"
+    "viewOrders": "Bestellungen ansehen",
+    "invoice": "Rechnung",
+    "invoiceNumber": "Steuerbeleg {number}",
+    "downloadInvoice": "PDF herunterladen"
+  },
+  "BankTransferPayment": {
+    "title": "Per Überweisung zahlen",
+    "intro": "Scannen Sie den QR-Code in Ihrer Banking-App oder geben Sie die Daten manuell ein. Wir ordnen die Zahlung über das Variable Symbol zu.",
+    "qrAlt": "QR-Code für die Überweisung",
+    "accountName": "Empfänger",
+    "accountNumber": "Kontonummer",
+    "iban": "IBAN",
+    "bankName": "Bank",
+    "variableSymbol": "Variabler Symbol",
+    "amount": "Betrag",
+    "message": "Verwendungszweck",
+    "copy": "Kopieren"
   }
 }
